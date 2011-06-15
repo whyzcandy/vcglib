@@ -540,6 +540,24 @@ void VVStarVF( typename FaceType::VertexType* vp, std::vector<typename FaceType:
 }
 
 /*!
+* Compute the set of faces adjacent to a given vertex using VF adjacency. 
+*	\param vp	pointer to the vertex whose star has to be computed.
+*	\param faceVec a std::vector of Face pointer that is filled with the adjacent faces.
+*
+*/
+template <class FaceType>
+void VFStarVF( typename FaceType::VertexType* vp, std::vector<typename FaceType *> &faceVec)
+{
+	typedef typename FaceType::VertexType* VertexPointer;
+	faceVec.clear();
+	face::VFIterator<FaceType> vfi(vp);
+	while(!vfi.End())
+	{
+		faceVec.push_back(vfi.F());
+		++vfi;
+	}
+}
+/*!
 * Check if two faces share and edge through the FF topology.
 *	\param f0,f1 the two face to be checked
 * \param i0,i1 the index of the shared edge;
