@@ -124,7 +124,7 @@ class QuadricTexHelper
     {
        std::vector<std::pair<vcg::TexCoord2f ,Quadric5<double> > > &qv = Vd(v);
 
-       for(int i = 0; i < qv.size(); i++)
+       for(size_t i = 0; i < qv.size(); i++)
        {
          vcg::TexCoord2f &f = qv[i].first;
          if((f.u() == coord.u()) && (f.v() == coord.v()))
@@ -138,7 +138,7 @@ class QuadricTexHelper
     {
        std::vector<std::pair<vcg::TexCoord2f ,Quadric5<double> > > &qv = Vd(v);
 
-       for(int i = 0; i < qv.size(); i++)
+       for(size_t i = 0; i < qv.size(); i++)
        {
          vcg::TexCoord2f &f = qv[i].first;
          if((f.u() == coord.u()) && (f.v() == coord.v()))
@@ -152,7 +152,7 @@ class QuadricTexHelper
     {
        std::vector<std::pair<vcg::TexCoord2f ,Quadric5<double> > > &qv = Vd(v);
 
-       for(int i = 0; i < qv.size(); i++)
+       for(size_t i = 0; i < qv.size(); i++)
        {
          vcg::TexCoord2f &f = qv[i].first;
          if((f.u() == coord.u()) && (f.v() == coord.v()))
