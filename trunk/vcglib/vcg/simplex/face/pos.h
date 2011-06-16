@@ -86,8 +86,11 @@ public:
 	// Official Access functions functions 
    VertexType *& V(){ return v; }
 	 int         & E(){ return z; }
-	 FaceType   *& F(){ return f; }
+   FaceType   *& F(){ return f; }
 
+   VertexType * V() const { return v; }
+   int          E() const { return z; }
+   FaceType   * F() const { return f; }
 
 // Returns the face index of the vertex inside the face.
 // Note that this is DIFFERENT from using the z member that denotes the edge index inside the face. 
