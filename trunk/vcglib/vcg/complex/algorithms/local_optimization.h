@@ -198,7 +198,7 @@ public:
 		nTargetVertices;
 
 	float	timeBudget;
-	int		start;
+  clock_t	start;
 	ScalarType currMetric;
 	ScalarType targetMetric;
   BaseParameterClass *pp;
@@ -375,7 +375,14 @@ void ClearHeap()
 		if ( IsTerminationFlag(LOnVertices)  &&  ( m.VertexNumber() <= nTargetVertices)) return true;
 		if ( IsTerminationFlag(LOnOps)		   && (nPerfmormedOps	== nTargetOps)) return true;
 		if ( IsTerminationFlag(LOMetric)		 &&  ( currMetric		> targetMetric)) return true;
-		if ( IsTerminationFlag(LOTime)			 &&	( (clock()-start)/(float)CLOCKS_PER_SEC > timeBudget)) return true;
+    if ( IsTerminationFlag(LOTime) )
+    {
+      clock_t cur = clock();
+      if(cur<start) // overflow of tick counter;
+        return true; // panic
+      else
+       if ( (cur - start)/(double)CLOCKS_PER_SEC > timeBudget) return true;
+    }
 		return false;
 	}
 
