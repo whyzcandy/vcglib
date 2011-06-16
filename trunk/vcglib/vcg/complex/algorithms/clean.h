@@ -106,7 +106,7 @@ private:
 		/// 
 		/** \addtogroup trimesh */
 		/*@{*/
-		/// Class of static functions to clean/correct/restore meshs. 
+    /// Class of static functions to clean//restore meshs.
 		template <class CleanMeshType>
 		class Clean
 		{
@@ -401,7 +401,6 @@ private:
       static int SplitNonManifoldVertex(MeshType& m)
       {
         FaceIterator fi;
-        int count_sv = 0; // split vertex counter
         typedef std::pair<FacePointer,int> FaceInt;
 
         std::vector<std::pair<VertexPointer, std::vector<FaceInt> > >ToSplitVec;
@@ -437,13 +436,13 @@ private:
         // Second step actually add new vertices and split them.
         typename tri::Allocator<MeshType>::template PointerUpdater<VertexPointer> pu;
         VertexIterator firstVp = tri::Allocator<MeshType>::AddVertices(m,ToSplitVec.size(),pu);
-        for(int i =0;i<ToSplitVec.size();++i)
+        for(size_t i =0;i<ToSplitVec.size();++i)
         {
           qDebug("Splitting Vertex %i",ToSplitVec[i].first-&*m.vert.begin());
           VertexPointer np=ToSplitVec[i].first;
           pu.Update(np);
           firstVp->ImportData(*np);
-          for(int j=0;j<ToSplitVec[i].second.size();++j)
+          for(size_t j=0;j<ToSplitVec[i].second.size();++j)
           {
             FaceInt ff=ToSplitVec[i].second[j];
             ff.first->V(ff.second)=&*firstVp;
@@ -1224,7 +1223,7 @@ private:
           if(maxVertVec[i]->N().dot(dirVec[i]) < -angleThreshold ) voteCount++;
         }
 //        qDebug("votecount = %i",voteCount);
-        if(voteCount < dirVec.size()/2) return false;
+        if(voteCount < int(dirVec.size())/2) return false;
         FlipMesh(m);
         return true;
       }
