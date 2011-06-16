@@ -546,7 +546,7 @@ void VVStarVF( typename FaceType::VertexType* vp, std::vector<typename FaceType:
 *
 */
 template <class FaceType>
-void VFStarVF( typename FaceType::VertexType* vp, std::vector<typename FaceType *> &faceVec)
+void VFStarVF( typename FaceType::VertexType* vp, std::vector<FaceType *> &faceVec)
 {
 	typedef typename FaceType::VertexType* VertexPointer;
 	faceVec.clear();
