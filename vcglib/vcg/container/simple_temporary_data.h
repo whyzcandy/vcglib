@@ -176,7 +176,7 @@ public:
 
 	void Resize(const int &  ) {assert(0);}
 	void Reorder(std::vector<size_t> &  ){assert(0);}
-	void * At(unsigned int i ) {assert(0);return (void*)0;}
+	void * At(unsigned int ) {assert(0);return (void*)0;}
 };
 
 } // end namespace vcg
