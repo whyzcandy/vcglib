@@ -155,7 +155,7 @@ class SimpleTempData:public SimpleTempDataBase{
 
 	void Reorder(std::vector<size_t> & newVertIndex){
 		for(unsigned int i = 0 ; i < data.size(); ++i){
-			if( newVertIndex[i] != std::numeric_limits<size_t>::max())
+			if( newVertIndex[i] != (std::numeric_limits<size_t>::max)())
 				data[newVertIndex[i]] = data[i];
 		}
 	}
