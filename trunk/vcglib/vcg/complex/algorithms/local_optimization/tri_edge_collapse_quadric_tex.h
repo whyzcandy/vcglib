@@ -239,9 +239,13 @@ class TriEdgeCollapseQuadricTex: public vcg::tri::TriEdgeCollapse< TriMeshType, 
     assert(0); return -1;
   }
 
-  inline int GetTexCoords(vcg::TexCoord2f &tcoord0_1,vcg::TexCoord2f &tcoord1_1,vcg::TexCoord2f &tcoord0_2,vcg::TexCoord2f &tcoord1_2)
+  inline int GetTexCoords(vcg::TexCoord2f &tcoord0_1, vcg::TexCoord2f &tcoord1_1,vcg::TexCoord2f &tcoord0_2,vcg::TexCoord2f &tcoord1_2)
   {
     int ncoords = 0;
+    tcoord0_1.P()=Point2f(0.5f,0.5f);
+    tcoord1_1.P()=Point2f(0.5f,0.5f);
+    tcoord0_2.P()=Point2f(0.5f,0.5f);
+    tcoord1_2.P()=Point2f(0.5f,0.5f);
 
     vcg::face::VFIterator<FaceType> vfi(this->pos.V(0));
 
@@ -268,7 +272,6 @@ class TriEdgeCollapseQuadricTex: public vcg::tri::TriEdgeCollapse< TriMeshType, 
           else
             return 2;
         }
-
         ncoords++;
       }
 
@@ -467,7 +470,7 @@ class TriEdgeCollapseQuadricTex: public vcg::tri::TriEdgeCollapse< TriMeshType, 
 
     inline void ComputeMinimal(double vv[5],const double v0[5],const double v1[5], const Quadric5<double> qsum,BaseParameterClass *_pp)
     {
-      tri::TriEdgeCollapseQuadricParameter *pp =(tri::TriEdgeCollapseQuadricParameter *)_pp;
+      tri::TriEdgeCollapseQuadricTexParameter *pp =(tri::TriEdgeCollapseQuadricTexParameter *)_pp;
       bool rt=qsum.Minimum(vv);
       // if the computation of the minimum fails we choose between the two edge points and the middle one.
       // Switch to this branch also in the case of not using the optimal placement.
@@ -517,7 +520,7 @@ class TriEdgeCollapseQuadricTex: public vcg::tri::TriEdgeCollapse< TriMeshType, 
 
     inline void ComputeMinimalWithGeoContraints(double vv[5],const double v0[5],const double v1[5], const Quadric5<double> qsum, const double geo[5],BaseParameterClass *_pp)
     {
-    tri::TriEdgeCollapseQuadricParameter *pp =(tri::TriEdgeCollapseQuadricParameter *)_pp;
+    tri::TriEdgeCollapseQuadricTexParameter *pp =(tri::TriEdgeCollapseQuadricTexParameter *)_pp;
       bool rt=qsum.MinimumWithGeoContraints(vv,geo);
       // if the computation of the minimum fails we choose between the two edge points and the middle one.
       // Switch to this branch also in the case of not using the optimal placement.
@@ -562,7 +565,7 @@ class TriEdgeCollapseQuadricTex: public vcg::tri::TriEdgeCollapse< TriMeshType, 
 
   static void InitQuadric(TriMeshType &m,BaseParameterClass *_pp)
   {
-  tri::TriEdgeCollapseQuadricParameter *pp =(tri::TriEdgeCollapseQuadricParameter *)_pp;
+  tri::TriEdgeCollapseQuadricTexParameter *pp =(tri::TriEdgeCollapseQuadricTexParameter *)_pp;
     typename TriMeshType::FaceIterator pf;
     HelperType::Init();
 
@@ -640,7 +643,7 @@ class TriEdgeCollapseQuadricTex: public vcg::tri::TriEdgeCollapse< TriMeshType, 
 
   inline  void UpdateHeap(HeapType & h_ret,BaseParameterClass *_pp)
   {
-    tri::TriEdgeCollapseQuadricParameter *pp =(tri::TriEdgeCollapseQuadricParameter *)_pp;
+    tri::TriEdgeCollapseQuadricTexParameter *pp =(tri::TriEdgeCollapseQuadricTexParameter *)_pp;
     this->GlobalMark()++;
     VertexType *v[2];
     v[0]= this->pos.V(0);
@@ -686,7 +689,7 @@ class TriEdgeCollapseQuadricTex: public vcg::tri::TriEdgeCollapse< TriMeshType, 
 
   void Execute(TriMeshType &m, BaseParameterClass *_pp)
   {
-  tri::TriEdgeCollapseQuadricParameter *pp =(tri::TriEdgeCollapseQuadricParameter *)_pp;
+  tri::TriEdgeCollapseQuadricTexParameter *pp =(tri::TriEdgeCollapseQuadricTexParameter *)_pp;
   Quadric5<double> qsum1;
   Quadric5<double> qsum2;
   double min1[5];
