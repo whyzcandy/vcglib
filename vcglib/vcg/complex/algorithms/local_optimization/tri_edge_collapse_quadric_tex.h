@@ -40,27 +40,22 @@ namespace tri
 class TriEdgeCollapseQuadricTexParameter : public BaseParameterClass
 {
 public:
-  double	 QualityThr; // all
-  double 	BoundaryWeight;
-  double	 NormalThr;
-  double	 CosineThr;
-  double	 QuadricEpsilon;
-  double	 ScaleFactor;
+  double  BoundaryWeight;
+  double  CosineThr;
   float   ExtraTCoordWeight;
-  bool		UseArea;
-  bool		UseVertexWeight;
-  bool		NormalCheck;
-  bool		QualityCheck;
-  bool		QualityQuadric;
-  bool		OptimalPlacement;
-  bool		MemoryLess;
-  bool		ComplexCheck;
-  bool		ScaleIndependent;
-//***********************
-  bool		PreserveTopology;
-  bool		PreserveBoundary;
-  bool		MarkComplex;
-  bool		SafeHeapUpdate;
+  bool    NormalCheck;
+  double	  NormalThrRad;
+  bool    OptimalPlacement;
+  bool		  PreserveBoundary;
+  bool		  PreserveTopology;
+  double	  QuadricEpsilon;
+  double	  QualityThr;
+  bool	    QualityQuadric;
+  bool    SafeHeapUpdate;
+  double	  ScaleFactor;
+  bool	    ScaleIndependent;
+  bool	    UseArea;
+  bool	    UseVertexWeight;
 
   TriEdgeCollapseQuadricTexParameter()
   {
@@ -69,21 +64,22 @@ public:
 
   void SetDefaultParams()
   {
-    UseArea=true;
-    UseVertexWeight=false;
-    NormalCheck=false;
-    NormalThr=M_PI/2;
-    QualityCheck=true;
-    QualityThr=.1;
-    BoundaryWeight=.5;
-    OptimalPlacement=true;
-    ScaleIndependent=true;
-    ComplexCheck=false;
-    QuadricEpsilon =1e-15;
-    ScaleFactor=1.0;
-    ExtraTCoordWeight=0.0;
-    QualityQuadric = false;
-    PreserveTopology = false;
+    this->BoundaryWeight=.5;
+    this->CosineThr = cos(M_PI/2);
+    this->ExtraTCoordWeight=0.0;
+    this->NormalCheck=false;
+    this->NormalThrRad=M_PI/2;
+    this->OptimalPlacement=true;
+    this->PreserveBoundary = false;
+    this->PreserveTopology = false;
+    this->QuadricEpsilon =1e-15;
+    this->QualityThr=.1;
+    this->QualityQuadric = false;
+    this->SafeHeapUpdate=false;
+    this->ScaleFactor=1.0;
+    this->ScaleIndependent=true;
+    this->UseArea=true;
+    this->UseVertexWeight=false;
   }
 };
 
