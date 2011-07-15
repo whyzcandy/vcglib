@@ -123,56 +123,58 @@ namespace tri{
 		class QInfoStandard
 		{
 		public:
-			QInfoStandard(){};
-      static void Init(){};
+      QInfoStandard(){}
+      static void Init(){}
       static math::Quadric<double> &Qd(VERTEX_TYPE &v) {return v.Qd();}
       static math::Quadric<double> &Qd(VERTEX_TYPE *v) {return v->Qd();}
-      static typename VERTEX_TYPE::ScalarType W(VERTEX_TYPE */*v*/) {return 1.0;};
-      static typename VERTEX_TYPE::ScalarType W(VERTEX_TYPE &/*v*/) {return 1.0;};
-      static void Merge(VERTEX_TYPE & v_dest, VERTEX_TYPE const & v_del){};
+      static typename VERTEX_TYPE::ScalarType W(VERTEX_TYPE */*v*/) {return 1.0;}
+      static typename VERTEX_TYPE::ScalarType W(VERTEX_TYPE &/*v*/) {return 1.0;}
+      static void Merge(VERTEX_TYPE & v_dest, VERTEX_TYPE const & v_del){}
 		};
 
 
 class TriEdgeCollapseQuadricParameter : public BaseParameterClass
 {
 public:
-	double	QualityThr; // all 
-	double	BoundaryWeight;
-	double	NormalThrRad;
-	double	CosineThr;
-	double	QuadricEpsilon;
-	double	ScaleFactor;
-	bool		UseArea;
-	bool		UseVertexWeight;
-	bool		NormalCheck;
-	bool		QualityCheck;
-	bool		OptimalPlacement;
-	bool		MemoryLess;
-	bool		QualityWeight;
-	bool		ScaleIndependent;
-	//***********************
-	bool    QualityQuadric; // During the initialization manage all the edges as border edges adding a set of additional quadrics that are useful mostly for keeping face aspect ratio good.
-	bool		PreserveTopology; 
-	bool		PreserveBoundary; 
-  bool		FastPreserveBoundary;
-	bool		SafeHeapUpdate;
+  double    BoundaryWeight;
+  double    CosineThr;
+  bool      FastPreserveBoundary;
+  bool      NormalCheck;
+  double    NormalThrRad;
+  bool      OptimalPlacement;
+  bool      PreserveTopology;
+  bool      PreserveBoundary;
+  double    QuadricEpsilon;
+  bool      QualityCheck;
+  bool      QualityQuadric; // During the initialization manage all the edges as border edges adding a set of additional quadrics that are useful mostly for keeping face aspect ratio good.
+  double    QualityThr; // all
+  bool      QualityWeight;
+  bool      SafeHeapUpdate;
+  double    ScaleFactor;
+  bool      ScaleIndependent;
+  bool      UseArea;
+  bool      UseVertexWeight;
 
   void SetDefaultParams()
   {
-    UseArea=true;
-    UseVertexWeight=false;
+    BoundaryWeight=.5;
+    CosineThr=cos(M_PI/2);
+    FastPreserveBoundary=false;
     NormalCheck=false;
     NormalThrRad=M_PI/2;
-    QualityCheck=true;
-    QualityThr=.1;
-    BoundaryWeight=.5;
-    QualityQuadric=false;
     OptimalPlacement=true;
-    ScaleIndependent=true;
-    QualityWeight=false;
-    QuadricEpsilon =1e-15;
-    ScaleFactor=1.0;
+    PreserveBoundary = false;
     PreserveTopology = false;
+    QuadricEpsilon =1e-15;
+    QualityCheck=true;
+    QualityQuadric=false;
+    QualityThr=.1;
+    QualityWeight=false;
+    SafeHeapUpdate =false;
+    ScaleFactor=1.0;
+    ScaleIndependent=true;
+    UseArea=true;
+    UseVertexWeight=false;
   }
 
   TriEdgeCollapseQuadricParameter() {SetDefaultParams();}
