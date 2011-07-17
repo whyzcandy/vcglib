@@ -188,7 +188,7 @@ public:
 	 Check if this flipping operation can be performed.
 	 It is a topological and geometrical check. 
 	 */
-  virtual bool IsFeasible(const BaseParameterClass *_pp)
+  virtual bool IsFeasible(BaseParameterClass *_pp)
 	{
     PlanarEdgeFlipParameter *pp=(PlanarEdgeFlipParameter *)_pp;
 		if(!vcg::face::CheckFlipEdge(*this->_pos.F(), this->_pos.E()))
