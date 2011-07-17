@@ -177,7 +177,7 @@ public:
     UseVertexWeight=false;
   }
 
-  TriEdgeCollapseQuadricParameter() {SetDefaultParams();}
+  TriEdgeCollapseQuadricParameter() {this->SetDefaultParams();}
 };
 
 
@@ -202,17 +202,6 @@ public:
 //			return p;
 //		}
 
-		enum Hint {
-			HNHasFFTopology       = 0x0001,  // La mesh arriva con la topologia ff gia'fatta
-			HNHasVFTopology       = 0x0002,  // La mesh arriva con la topologia bf gia'fatta
-			HNHasBorderFlag       = 0x0004  // La mesh arriva con i flag di bordo gia' settati
-		};
-
-		static int & Hnt(){static int hnt; return hnt;}      // the current hints
-
-		static void SetHint(Hint hn)		{	Hnt() |= hn; }
-		static void ClearHint(Hint hn)	{	Hnt()&=(~hn);}
-		static bool IsSetHint(Hint hn)  { return (Hnt()&hn)!=0; }
 
 		// puntatori ai vertici che sono stati messi non-w per preservare il boundary
 		static std::vector<typename TriMeshType::VertexPointer>  & WV(){
@@ -229,7 +218,9 @@ public:
 
     inline bool IsFeasible(BaseParameterClass *_pp){
       QParameter *pp=(QParameter *)_pp;
-      bool res = ( !pp->PreserveTopology || EdgeCollapser<TriMeshType, VertexPair>::LinkConditions(this->pos) );
+      if(!pp->PreserveTopology) return true;
+
+      bool res = ( EdgeCollapser<TriMeshType, VertexPair>::LinkConditions(this->pos) );
       if(!res) ++( TEC::FailStat::LinkConditionEdge() );
       return res;
     }
@@ -251,10 +242,6 @@ public:
     static void Finalize(TriMeshType &m, HeapType& /*h_ret*/, BaseParameterClass *_pp)
     {
       QParameter *pp=(QParameter *)_pp;
-      // if the mesh was prepared with precomputed borderflags
-      // correctly set them again.
-      if(IsSetHint(HNHasBorderFlag) ) 
-			  vcg::tri::UpdateFlags<TriMeshType>::FaceBorderFromVF(m);
 
       // If we had the boundary preservation we should clean up the writable flags
       if(pp->FastPreserveBoundary)
@@ -280,10 +267,8 @@ public:
 
   pp->CosineThr=cos(pp->NormalThrRad);
 
-  if(!IsSetHint(HNHasVFTopology) ) vcg::tri::UpdateTopology<TriMeshType>::VertexFace(m);
-
-  if(!IsSetHint(HNHasBorderFlag) )
-      vcg::tri::UpdateFlags<TriMeshType>::FaceBorderFromVF(m);
+  vcg::tri::UpdateTopology<TriMeshType>::VertexFace(m);
+  vcg::tri::UpdateFlags<TriMeshType>::FaceBorderFromVF(m);
 
   if(pp->FastPreserveBoundary)
     {
