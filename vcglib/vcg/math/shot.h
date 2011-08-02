@@ -209,7 +209,7 @@ public:
   void ApplyRigidTransformation(const Matrix44<S> & M);
 
   /// Given a similarity transformation such that p' = s R p + T modifies the reference frame accordingly.
-  void ApplySimilarity(const Matrix44<S> & M);
+  void ApplySimilarity(  Matrix44<S>   M);
 
   /// Given a similarity transformation such that p' = s R p + T modifies the reference frame accordingly.
   void ApplySimilarity(const Similarity<S> & Sim);
@@ -484,27 +484,25 @@ void Shot<S, RotationType>::ApplyRigidTransformation(const Matrix44<S> & M)
 {
   Matrix44<S> rotM;
   Extrinsics.rot.ToMatrix(rotM);
-
   // roto-translate the viewpoint
   Extrinsics.tra = M * Extrinsics.tra;
-
-  Extrinsics.rot =  rotM * M.transpose();
-
-  Extrinsics.rot.ElementAt(3,0) = 0;
-  Extrinsics.rot.ElementAt(3,1) = 0;
-  Extrinsics.rot.ElementAt(3,2) = 0;
+  Matrix44<S> newRot = rotM * M.transpose();
+  Extrinsics.SetRot(newRot);
 }
 
-/// Given a similarity transformation such that p' = s R p + T modifies the reference frame accordingly.
+/// Given a similarity transformation modifies the reference frame accordingly.
 template <class S, class RotationType>
-void Shot<S, RotationType>::ApplySimilarity(const Matrix44<S> & M)
+void Shot<S, RotationType>::ApplySimilarity( Matrix44<S>   M)
 {
   Matrix44<S> rotM;
   Extrinsics.rot.ToMatrix(rotM);
 
-  // obtain scale factor
-  Point3<S> p = M.GetRow3(0);
-  ScalarType scalefactor = 1.0 / p.Norm();
+  // normalize
+  M = M * (1/M.ElementAt(3,3));
+  M[3][3] = 1; // just for numeric precision
+
+  // compute scale factor
+  ScalarType scalefactor = 1.0 / pow(ScalarType(M.Determinant()),1/ScalarType(3.0));
 
   // roto-translate the viewpoint
   Extrinsics.tra = M * Extrinsics.tra;
@@ -512,16 +510,13 @@ void Shot<S, RotationType>::ApplySimilarity(const Matrix44<S> & M)
   vcg::Matrix44<S> M2 = M;
 
   M2 = M2 * scalefactor;
-
-  Extrinsics.rot = rotM * M2.transpose();
-
-  Extrinsics.rot.ElementAt(3,0) = 0;
-  Extrinsics.rot.ElementAt(3,1) = 0;
-  Extrinsics.rot.ElementAt(3,2) = 0;
-  Extrinsics.rot.ElementAt(3,3) = 1;
+  M2[3][3] = 1.0; //unnecessary, it will multiply a pure rotation
+   
+  rotM = rotM * M2.transpose();
+  Extrinsics.SetRot(rotM);
 }
 
-/// Given a similarity transformation such that p' = s R p + T modifies the reference frame accordingly.
+/// Given a similarity transformation modifies the reference frame accordingly.
 template <class S, class RotationType>
 void Shot<S, RotationType>::ApplySimilarity(const Similarity<S> & Sm)
 {
