@@ -570,7 +570,7 @@ class TriEdgeCollapseQuadricTex: public vcg::tri::TriEdgeCollapse< TriMeshType, 
         if((*pf).V(0)->IsR() &&(*pf).V(1)->IsR() &&(*pf).V(2)->IsR())
             {
               Quadric5<double> q;
-              q.byFace(*pf, QH::Qd3((*pf).V(0)), QH::Qd3((*pf).V(1)), QH::Qd3((*pf).V(2)),pp->QualityQuadric);
+              q.byFace(*pf, QH::Qd3((*pf).V(0)), QH::Qd3((*pf).V(1)), QH::Qd3((*pf).V(2)),pp->QualityQuadric,pp->BoundaryWeight);
 
               for(int j=0;j<3;++j)
                 if( (*pf).V(j)->IsW())
