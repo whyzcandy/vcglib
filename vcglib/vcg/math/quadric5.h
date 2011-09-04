@@ -242,7 +242,7 @@ public:
 	// computes the real quadric and the geometric quadric using the face
 	// The geometric quadric is added to the parameter qgeo
   template <class FaceType>
-  void byFace(FaceType &f, math::Quadric<double> &q1, math::Quadric<double> &q2, math::Quadric<double> &q3,bool QualityQuadric)
+  void byFace(FaceType &f, math::Quadric<double> &q1, math::Quadric<double> &q2, math::Quadric<double> &q3, bool QualityQuadric, ScalarType BorderWeight)
 	{
 		double q = QualityFace(f);
 		
@@ -272,6 +272,7 @@ public:
 					
 					temp.byFace(f,false);			// computes the full quadric
 					if(! f.IsB(j) ) temp.Scale(0.05);
+          else temp.Scale(BorderWeight);
 					*this+=temp;
 					
 					f.P2(j)=oldpoint;
