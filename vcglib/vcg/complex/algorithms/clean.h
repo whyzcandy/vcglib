@@ -1527,13 +1527,13 @@ static int ClusterVertex(MeshType &m, const ScalarType radius)
 				if(!(*viv).IsD() && !(*viv).IsV())
 					{
 						(*viv).SetV();
-						Point3f p = viv->cP();
-						Box3f bb(p-Point3f(radius,radius,radius),p+Point3f(radius,radius,radius));
+						Point3<ScalarType> p = viv->cP();
+						Box3<ScalarType> bb(p-Point3<ScalarType>(radius,radius,radius),p+Point3<ScalarType>(radius,radius,radius));
 						GridGetInBox(sht, markerFunctor, bb, closests);
 						// qDebug("Vertex %i has %i closest", &*viv - &*m.vert.begin(),closests.size());
             for(size_t i=0; i<closests.size(); ++i)
 						{
-							float dist = Distance(p,closests[i]->cP());
+							ScalarType dist = Distance(p,closests[i]->cP());
 							if(dist < radius && !closests[i]->IsV())
 												{
 //													printf("%f %f \n",dist,radius);
