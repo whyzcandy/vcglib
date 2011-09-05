@@ -215,27 +215,56 @@ protected:
             int cnt=0;
             std::vector<HashIterator> toDel;
 
-			for (int i=bb.min.X();i<=bb.max.X();i++)
-				for (int j=bb.min.Y();j<=bb.max.Y();j++)
-					for (int k=bb.min.Z();k<=bb.max.Z();k++)
-					{
-                std::pair<HashIterator,HashIterator> CellRange = hash_table.equal_range(Point3i(i,j,k));
-                for(HashIterator hi = CellRange.first; hi!=CellRange.second;++hi)
-                {
-                    if(SquaredDistance(p,hi->second->cP()) <= r2)
+            for (int i=bb.min.X();i<=bb.max.X();i++)
+                for (int j=bb.min.Y();j<=bb.max.Y();j++)
+                    for (int k=bb.min.Z();k<=bb.max.Z();k++)
                     {
-                        cnt++;
-                        toDel.push_back(hi);
+                        std::pair<HashIterator,HashIterator> CellRange = hash_table.equal_range(Point3i(i,j,k));
+                        for(HashIterator hi = CellRange.first; hi!=CellRange.second;++hi)
+                        {
+                            if(SquaredDistance(p,hi->second->cP()) <= r2)
+                            {
+                                cnt++;
+                                toDel.push_back(hi);
+                            }
+                        }
                     }
-                }
-            }
+            for(typename std::vector<HashIterator>::iterator vi=toDel.begin(); vi!=toDel.end();++vi)
+                hash_table.erase(*vi);
+
+            return cnt;
+        }
+        // Specialized version that is able to take in input a
+        template<class DistanceFunctor>
+        int RemoveInSphereNormal(const Point3<ScalarType> &p, const Point3<ScalarType> &n, DistanceFunctor &DF, const ScalarType radius)
+        {
+            Box3x b(p-Point3f(radius,radius,radius),p+Point3f(radius,radius,radius));
+            vcg::Box3i bb;
+            BoxToIBox(b,bb);
+            int cnt=0;
+            std::vector<HashIterator> toDel;
+
+            for (int i=bb.min.X();i<=bb.max.X();i++)
+                for (int j=bb.min.Y();j<=bb.max.Y();j++)
+                    for (int k=bb.min.Z();k<=bb.max.Z();k++)
+                    {
+                        std::pair<HashIterator,HashIterator> CellRange = hash_table.equal_range(Point3i(i,j,k));
+                        for(HashIterator hi = CellRange.first; hi!=CellRange.second;++hi)
+                        {
+                            if(DF(p,n,hi->second->cP(),hi->second->cN()) <= radius)
+                            {
+                                cnt++;
+                                toDel.push_back(hi);
+                            }
+                        }
+                    }
             for(typename std::vector<HashIterator>::iterator vi=toDel.begin(); vi!=toDel.end();++vi)
                 hash_table.erase(*vi);
 
             return cnt;
         }
 
-		// Thsi version of the removal is specialized for the case where
+    // This version of the removal is specialized for the case where
 		// an object has a pointshaped box and using the generic bbox interface is just a waste of time.
 		
 		void RemovePunctual( ObjType *s)
