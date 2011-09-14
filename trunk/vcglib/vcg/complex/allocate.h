@@ -1,4 +1,4 @@
-/****************************************************************************
+/***************************************************************************
 * VCGLib                                                            o o     *
 * Visual and Computer Graphics Library                            o     o   *
 *                                                                _   O  _   *
@@ -966,8 +966,8 @@ public:
 	static void GetAllPerVertexAttribute(const MeshType & m, std::vector<std::string> &all){
 		typename std::set<PointerToAttribute > ::const_iterator i;
 		for(i = m.vert_attr.begin(); i != m.vert_attr.end(); ++i )
-        if((*i)._name == typeid(ATTR_TYPE).name())
-						all.push_back((*i)._name);
+        if(!(*i)._name.empty())
+				all.push_back((*i)._name);
 	}
 
 	template <class ATTR_TYPE> 
