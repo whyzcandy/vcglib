@@ -103,7 +103,7 @@ class Quadric
 
     double evaluate(double u, double v)
     {
-        return a*u*u + b*u*v + c*v*v + d*u + e*v;
+        return a()*u*u + b()*u*v + c()*v*v + d()*u + e()*v;
     }
 
     double du(double u, double v)
