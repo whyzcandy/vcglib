@@ -218,7 +218,7 @@ public:
 			this->SetVN(ns);
 			_vfpP = new  FaceType*[this->VN()]; 
 			_vfiP = new  char[this->VN()];
-			for(int i = 0; i < this->VN(); ++i) {_vfpP[i] = 0;_vfiP = -1;}
+      for(int i = 0; i < this->VN(); ++i) {_vfpP[i] = 0;_vfiP[i] = -1;}
 		}
 		T::Alloc(ns);
 													

@@ -114,7 +114,7 @@ public:
 	} 
 	/// Operator to order half-edge; it's compare at the first the face pointers, then the index of the edge and finally the vertex pointers
 	inline bool operator <= ( PosType const & p) const {
-		return	(f!=p.f)?(f<f.p):
+    return	(f!=p.f)?(f<p.f):
 						(z!=p.z)?(z<p.z):
 						(v<=p.v);
 	}	
