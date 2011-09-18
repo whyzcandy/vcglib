@@ -157,7 +157,7 @@ protected:
 	}
 
     ///remove all the objects in a cell
-    void RemoveCell(const Point3i &cell)
+    void RemoveCell(const Point3i &/*cell*/)
     {
     }
 
@@ -210,7 +210,7 @@ protected:
         {
             Box3x b(p-Point3f(radius,radius,radius),p+Point3f(radius,radius,radius));
             vcg::Box3i bb;
-            BoxToIBox(b,bb);
+            this->BoxToIBox(b,bb);
             ScalarType r2=radius*radius;
             int cnt=0;
             std::vector<HashIterator> toDel;
@@ -240,7 +240,7 @@ protected:
         {
             Box3x b(p-Point3f(radius,radius,radius),p+Point3f(radius,radius,radius));
             vcg::Box3i bb;
-            BoxToIBox(b,bb);
+            this->BoxToIBox(b,bb);
             int cnt=0;
             std::vector<HashIterator> toDel;
 
