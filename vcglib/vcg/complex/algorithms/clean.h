@@ -420,7 +420,7 @@ private:
               std::set<FaceInt> faceSet;
               do
               {
-                faceSet.insert(make_pair(curPos.F(),curPos.VInd()));
+                faceSet.insert(std::make_pair(curPos.F(),curPos.VInd()));
                 curPos.NextE();
               } while (curPos != startPos);
 
