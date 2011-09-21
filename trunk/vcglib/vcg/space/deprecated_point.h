@@ -359,8 +359,7 @@ public:
 		return *this; }
 
   inline ParamType GlobalToLocal(PointType /*p*/) const{
-//		ParamType p();
-    return ; }
+      return ParamType(); }
 //@}
 
 }; // end class definition
