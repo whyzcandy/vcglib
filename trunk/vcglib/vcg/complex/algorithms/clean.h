@@ -1019,15 +1019,23 @@ private:
 			      V + F - E = 2C - 2Gs - B
 
 			where C is the number of connected components and Gs is the sum of
-			the genus of all connected components.
+			the genus of all connected components.*/
 
-			*/
-			static int MeshGenus(MeshType &m, int numholes, int numcomponents, int count_e)
+			static int MeshGenus(int nvert,int nedges,int nfaces, int numholes, int numcomponents)
 			{
-				int V = m.vn;
-				int F = m.fn;
-				int E = count_e;
-				return -((V + F - E + numholes - 2 * numcomponents) / 2);
+				return -((nvert + nfaces - nedges + numholes - 2 * numcomponents) / 2);
+			}
+			
+			static int MeshGenus(MeshType &m)
+			{
+				int nvert=m.vn;
+				int nfaces=m.fn;
+				int boundary_e,nedges;
+				CountEdges(m,nedges,boundary_e);
+				int numholes=CountHoles(m);
+				int numcomponents=CountConnectedComponents(m);
+				int G=MeshGenus(nvert,nedges,nfaces,numholes,numcomponents);
+				return G;
 			}
 
 			/**
