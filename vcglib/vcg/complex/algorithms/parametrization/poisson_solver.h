@@ -1,7 +1,28 @@
+/****************************************************************************
+* VCGLib                                                            o o     *
+* Visual and Computer Graphics Library                            o     o   *
+*                                                                _   O  _   *
+* Copyright(C) 2004                                                \/)\/    *
+* Visual Computing Lab                                            /\/|      *
+* ISTI - Italian National Research Council                           |      *
+*                                                                    \      *
+* All rights reserved.                                                      *
+*                                                                           *
+* This program is free software; you can redistribute it and/or modify      *   
+* it under the terms of the GNU General Public License as published by      *
+* the Free Software Foundation; either version 2 of the License, or         *
+* (at your option) any later version.                                       *
+*                                                                           *
+* This program is distributed in the hope that it will be useful,           *
+* but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+* GNU General Public License (http://www.gnu.org/licenses/gpl.txt)          *
+* for more details.                                                         *
+*                                                                           *
+****************************************************************************/
 
-
-#ifndef _POISSON_SOLVER
-#define _POISSON_SOLVER
+#ifndef VCG_POISSON_SOLVER
+#define VCG_POISSON_SOLVER
 
 #include <time.h>
 //#include <vcg/complex/algorithms/update/bounding.h>
@@ -15,6 +36,8 @@
 #include <src/Sparse/DynamicSparseMatrix.h>
 #include <Eigen/SparseExtra>
 
+namespace vcg {
+	namespace tri{
 template <class MeshType>
 class PoissonSolver
 {
@@ -538,6 +561,8 @@ public:
 		int NNmanifoldV=vcg::tri::Clean<MeshType>::CountNonManifoldVertexFF(mesh);
 		if (NNmanifoldV!=0)return false;
 		int G=vcg::tri::Clean<MeshType>::MeshGenus(mesh);
+		int numholes=vcg::tri::Clean<MeshType>::CountHoles(mesh);
+		if (numholes==0)return false;
 		return (G==0);
 	}
 
@@ -577,7 +602,7 @@ public:
 	void FixDefaultVertices()
 	{
 		///in this case there are already vertices fixed, so no need to fix by default
-		assert(to_fix.size()=0);
+		assert(to_fix.size()==0);
 		///then fix only one vertex
 		if (use_direction_field)
 		{
@@ -704,5 +729,7 @@ public:
 	PoissonSolver(MeshType &_mesh):mesh(_mesh)
 	{}
 
-};
+	}; // end class
+	} //End Namespace Tri
+} // End Namespace vcg
 #endif
