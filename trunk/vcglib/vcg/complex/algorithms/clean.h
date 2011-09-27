@@ -882,14 +882,15 @@ private:
 			{
         int numholev=0;
         FaceIterator fi;
+		
 				FaceIterator gi;
 				vcg::face::Pos<FaceType> he;
 				vcg::face::Pos<FaceType> hei;
 
         std::vector< std::vector<Point3x> > holes; //indices of vertices
 
-				for(fi=m.face.begin();fi!=m.face.end();++fi)
-					(*fi).ClearS();
+				vcg::tri::UpdateFlags<MeshType>::VertexClearS(m);
+
 				gi=m.face.begin(); fi=gi;
 
 				for(fi=m.face.begin();fi!=m.face.end();fi++)//for all faces do
