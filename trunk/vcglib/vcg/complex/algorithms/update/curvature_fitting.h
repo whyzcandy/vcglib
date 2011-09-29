@@ -41,11 +41,11 @@
 #include <vcg/complex/algorithms/inertia.h>
 #include <vcg/math/matrix33.h>
 
-#include <vcg/Eigen/Core>
-#include <vcg/Eigen/QR>
-#include <vcg/Eigen/LU>
-#include <vcg/Eigen/SVD>
-#include <vcg/Eigen/Eigenvalues>
+#include <eigenlib/Eigen/Core>
+#include <eigenlib/Eigen/QR>
+#include <eigenlib/Eigen/LU>
+#include <eigenlib/Eigen/SVD>
+#include <eigenlib/Eigen/Eigenvalues>
 // GG include
 #include <vector>
 #include <vcg/complex/algorithms/nring.h>
