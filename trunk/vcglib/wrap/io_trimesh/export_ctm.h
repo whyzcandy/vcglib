@@ -34,7 +34,7 @@ namespace vcg {
                 typedef typename SaveMeshType::VertexPointer VertexPointer;
                 typedef typename SaveMeshType::FaceIterator FaceIterator;
 
-                static int Save(SaveMeshType &m, const char * filename, int mask=0, bool lossLessFlag=false)
+                static int Save(SaveMeshType &m, const char * filename, int mask=0, bool lossLessFlag=false, float relativePrecision=0.0001)
                 {
                     tri::Allocator<SaveMeshType>::CompactVertexVector(m);
                     tri::Allocator<SaveMeshType>::CompactFaceVector(m);
@@ -71,7 +71,10 @@ namespace vcg {
                     // Create a new exporter context
                     context = ctmNewContext(CTM_EXPORT);
                     if(lossLessFlag) ctmCompressionMethod(context, CTM_METHOD_MG1);
-                    else ctmCompressionMethod(context, CTM_METHOD_MG2);
+                    else {
+                      ctmCompressionMethod(context, CTM_METHOD_MG2);
+                      ctmVertexPrecision(context, relativePrecision);
+                    }
                     // Define our mesh representation to OpenCTM
                     ctmDefineMesh(context, &*aVertices.begin(), aVertCount, &*aIndices.begin(), aTriCount, NULL);
                     if( tri::HasPerVertexColor(m)   && (mask & io::Mask::IOM_VERTCOLOR))
