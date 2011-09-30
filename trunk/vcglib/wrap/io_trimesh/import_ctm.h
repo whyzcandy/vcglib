@@ -118,6 +118,15 @@ static int Open( OpenMeshType &m, const char * filename, int &loadmask, CallBack
       loadmask |= Mask::IOM_VERTCOLOR;
     }
 
+    CTMenum qualityAttrib = ctmGetNamedAttribMap(context,"Quality");
+    if(qualityAttrib != CTM_NONE)
+    {
+      const CTMfloat *qualities = ctmGetFloatArray(context,colorAttrib);
+      for(int i=0;i<vertCount;++i)
+          m.vert[i].Q()=qualities[i*4+0];
+      loadmask |= Mask::IOM_VERTQUALITY;
+    }
+
     Allocator<OpenMeshType>::AddFaces(m, triCount);
     for(int i=0;i<triCount;++i)
     {
