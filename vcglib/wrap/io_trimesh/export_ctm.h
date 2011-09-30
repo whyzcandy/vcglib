@@ -42,8 +42,18 @@ namespace vcg {
                     CTMuint aTriCount=m.fn;
                     std::vector<CTMfloat> aVertices(aVertCount*3);
                     std::vector<CTMfloat> aColors(aVertCount*4);
+                    std::vector<CTMfloat> aQuality(aVertCount*4);
                     std::vector<CTMuint> aIndices(aTriCount*3);
 
+                    CTMcontext context;
+                    // Create a new exporter context
+                    context = ctmNewContext(CTM_EXPORT);
+                    if(lossLessFlag) ctmCompressionMethod(context, CTM_METHOD_MG1);
+                    else {
+                      ctmCompressionMethod(context, CTM_METHOD_MG2);
+                      ctmVertexPrecision(context, relativePrecision);
+                    }
+                    // Prepare vertex and faces
                     for(int i=0;i<aVertCount;++i)
                     {
                         aVertices[i*3+0]=m.vert[i].P()[0];
@@ -56,6 +66,10 @@ namespace vcg {
                         aIndices[i*3+1]=m.face[i].V(1)-&*m.vert.begin();
                         aIndices[i*3+2]=m.face[i].V(2)-&*m.vert.begin();
                     }
+
+                    // Define our mesh representation to OpenCTM
+                    ctmDefineMesh(context, &*aVertices.begin(), aVertCount, &*aIndices.begin(), aTriCount, NULL);
+
                     if( tri::HasPerVertexColor(m)   && (mask & io::Mask::IOM_VERTCOLOR))
                     {
                         aColors.resize(aVertCount*4);
@@ -66,21 +80,18 @@ namespace vcg {
                             aColors[i*4+2]=(float)(m.vert[i].C()[2])/255.0f;
                             aColors[i*4+3]=(float)(m.vert[i].C()[3])/255.0f;
                         }
-                    }
-                    CTMcontext context;
-                    // Create a new exporter context
-                    context = ctmNewContext(CTM_EXPORT);
-                    if(lossLessFlag) ctmCompressionMethod(context, CTM_METHOD_MG1);
-                    else {
-                      ctmCompressionMethod(context, CTM_METHOD_MG2);
-                      ctmVertexPrecision(context, relativePrecision);
-                    }
-                    // Define our mesh representation to OpenCTM
-                    ctmDefineMesh(context, &*aVertices.begin(), aVertCount, &*aIndices.begin(), aTriCount, NULL);
-                    if( tri::HasPerVertexColor(m)   && (mask & io::Mask::IOM_VERTCOLOR))
-                        //CTMenum map = ctmAddAttribMap(context,&Colors[0], "Color");
                         ctmAddAttribMap(context,&aColors[0], "Color");
-                    //ctm.AttribPrecision(map, aOptions.mColorPrecision);
+                    }
+                    if( tri::HasPerVertexQuality(m)   && (mask & io::Mask::IOM_VERTQUALITY))
+                    {
+                        aQuality.resize(aVertCount*4,0);
+                        for(int i=0;i<aVertCount;++i)
+                        {
+                            aQuality[i*4+0]=m.vert[i].Q();
+                        }
+                        ctmAddAttribMap(context,&aQuality[0], "Quality");
+                    }
+
                     // Save the OpenCTM file
                     ctmSave(context, filename);
                     // Free the context
@@ -96,6 +107,7 @@ namespace vcg {
 
                     //vert
                     capability |= vcg::tri::io::Mask::IOM_VERTCOORD;
+                    capability |= vcg::tri::io::Mask::IOM_VERTQUALITY;
                     capability |= vcg::tri::io::Mask::IOM_VERTCOLOR;
                     return capability;
                 }
